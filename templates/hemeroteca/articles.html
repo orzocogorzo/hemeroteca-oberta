@@ -1,0 +1,23 @@
+{% extends 'hemeroteca/wrapper.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Articles</h1>
+<table id="articles" class="compact hover stripe">
+  <thead>
+    <tr>
+      <th>Títol</th>
+      <th>Firma</th>
+      <th>Número</th>
+      <th>Data</th>
+      <th>Secció</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+{% endblock %}
+
+{% block footer %}
+<script src="{% static 'hemeroteca/js/articles.ajax-table.js' %}" async></script>
+{% endblock %}

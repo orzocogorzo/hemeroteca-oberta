@@ -1,0 +1,13 @@
+{% extends 'hemeroteca/wrapper.html' %}
+{% load static %} 
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'hemeroteca/css/signature.css' %}" />
+{% endblock %}
+
+{% block content %}
+<h1>{{ signature.name }}</h1>
+<img class="signature-portrait" src="{% static signature.portrait %}" />
+<h2>Articles</h2>
+{% include 'hemeroteca/articles_table.html' %}
+{% endblock %}

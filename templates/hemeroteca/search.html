@@ -1,0 +1,25 @@
+{% extends 'hemeroteca/wrapper.html' %} {% load static %} {% block head %}
+<link rel="stylesheet" href="{% static 'hemeroteca/css/publications.css' %}" />
+{% endblock %} {% block content %}
+<h1>Cerca</h1>
+<form id="search">
+  <div class="field">
+    <input type="text" placeholder="Què estàs buscant?" />
+  </div>
+  <div class="field">
+    <input type="submit" value="Cerca" />
+  </div>
+</form>
+<table id="publications" class="compact hover stripe">
+  <thead>
+    <tr>
+      <th>Portada</th>
+      <th>Número</th>
+      <th>Data</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+{% endblock %} {% block footer %}
+<script src="{% static 'hemeroteca/js/search.js' %}" async></script>
+{% endblock %}

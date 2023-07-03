@@ -1,0 +1,35 @@
+{% load static %}
+<table id="articles" class="compact hover stripe">
+  <thead>
+    <tr>
+      <th>Títol</th>
+      <th>Firma</th>
+      <th>Número</th>
+      <th>Data</th>
+      <th>Secció</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for article in articles %}
+    <tr>
+      <td><a href="{% url 'hemeroteca:article' article.pk %}">{{ article.title }}</a></td>
+      {% if article.signature %}
+        <td><a href="{% url 'hemeroteca:signature' article.signature.pk %}">{{ article.signature.name }}</a></td>
+      {% else %}
+        <td></td>
+      {% endif %}
+      <td><a href="{% url 'hemeroteca:publication' article.publication.pk %}">{{ article.publication.pk }}</a></td>
+      <td><a href="{% url 'hemeroteca:publication' article.publication.pk %}">{{ article.publication.date | date:'d-m-Y' }}</a></td>
+      {% if article.section %}
+        <td><a href="{% url 'hemeroteca:section' article.section.pk %}">{{ article.section.name }}</a></td>
+      {% else %}
+        <td></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% block footer %}
+<script src="{% static 'hemeroteca/js/articles.table.js' %}" async></script>
+{% endblock %}

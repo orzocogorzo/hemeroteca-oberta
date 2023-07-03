@@ -1,0 +1,36 @@
+{% extends 'hemeroteca/wrapper.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'hemeroteca/css/publications.css' %}" />
+{% endblock %}
+
+{% block content %}
+<h1>Publicacions</h1>
+<table id="publications" class="compact hover stripe">
+  <thead>
+    <tr>
+      <th>Portada</th>
+      <th>Número</th>
+      <th>Data</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for publication in publications %}
+  <tr>
+    <td>
+      <a href="{% url 'hemeroteca:publication' publication.pk %}">
+        <img src="{% static publication.cover %}" loading="lazy" />
+      </a>
+    </td>
+    <td><a href="{% url 'hemeroteca:publication' publication.pk %}">{{ publication.number }}</a></td>
+    <td><a href="{% url 'hemeroteca:publication' publication.pk %}">{{ publication.date | date:'d-m-Y' }}</a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+{% block footer %}
+<script src="{% static 'hemeroteca/js/publications.table.js' %}" async></script>
+{% endblock %}

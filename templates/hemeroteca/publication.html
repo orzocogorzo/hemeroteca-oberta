@@ -1,0 +1,20 @@
+{% extends 'hemeroteca/wrapper.html' %}
+{% load static %} 
+
+{% block content %}
+<h1>Número {{ publication.number }}</h1>
+<object
+    id="document"
+    data="{% static publication.file %}"
+    type="application/pdf"
+    width="100%"
+>
+    <p>
+        No podem mostrar-te el contingut des d'aquí. Descarrega't l'arxiu
+        <a href="{% static publication.file %}">amb aquest enllaç.</a>
+    </p>
+</object>
+
+<h2>Artícles</h2>
+{% include 'hemeroteca/articles_table.html' %}
+{% endblock %}

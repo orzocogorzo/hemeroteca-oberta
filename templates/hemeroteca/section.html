@@ -1,0 +1,8 @@
+{% extends 'hemeroteca/wrapper.html' %}
+{% load static %}
+
+{% block content %}
+<h1>{{ section.name }}</h1>
+<h2>Artícles</h2>
+{% include 'hemeroteca/articles_table.html' %}
+{% endblock %}

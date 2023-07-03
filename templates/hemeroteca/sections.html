@@ -1,0 +1,24 @@
+{% extends 'hemeroteca/wrapper.html' %}
+{% load static %} 
+
+{% block content %}
+<h1>Seccions</h1>
+<table id="sections" class="compact hover stripe">
+  <thead>
+    <tr>
+      <th>Secció</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for section in sections %}
+  <tr>
+    <td><a href="{% url 'hemeroteca:section' section.pk %}">{{ section.name }}</a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+{% block footer %}
+<script src="{% static 'hemeroteca/js/sections.table.js' %}" async></script>
+{% endblock %}

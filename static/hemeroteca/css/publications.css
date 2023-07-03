@@ -1,0 +1,10 @@
+table tr td:first-child {
+  text-align: center;
+}
+
+table tr td:first-child img {
+  width: 100px;
+  height: 120px;
+  object-fit: contain;
+  object-position: center;
+}

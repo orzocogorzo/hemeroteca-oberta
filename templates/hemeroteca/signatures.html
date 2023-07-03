@@ -1,0 +1,24 @@
+{% extends 'hemeroteca/wrapper.html' %}
+{% load static %} 
+
+{% block content %}
+<h1>Firmes</h1>
+<table id="signatures" class="compact hover stripe">
+  <thead>
+    <tr>
+      <th>Firma</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for signature in signatures %}
+  <tr>
+    <td><a href="{% url 'hemeroteca:signature' signature.pk %}">{{ signature.name }}</a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+{% block footer %}
+<script src="{% static 'hemeroteca/js/signatures.table.js' %}" async></script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% block content %}
+<style rel="stylesheet" href="{% static 'hemeroteca/form.css' %}" />
+<form action="{% url 'hemeroteca:' + form.resource %}" method="POST">
+  {% csrf_token %}
+  {% for field in form.fields %}
+  <div class="field">
+    <label for="{{ field.name }}">{{ field.label }}</label>
+    <input
+      name="{{ field.name }}"
+      id="{{ field.name }}"
+      type="{{ field.type }}"
+      {% if field.value %}value="{{ field.value }}"{% endif %}
+      {% if field.required %}required{% endif %}
+      {% if field.autocomplete %}autocomplete="{{ field.autocomplete }}"{% endif %}
+      {% if field.accept %}accept="{{ field.accept }}"{% endif %}
+      {% if field.placeholder %}placeholder="{{ field.placeholder }}"{% endif %}
+      {% if field.min %}min="{{ field.min }}"{% endif %}
+      {% if field.max %}max="{{ field.max }}"{% endif %}
+    />
+  </div>
+  {% endfor %}
+  <div class="field">
+    <input type="submit" value="{{ form.submitMsg }}" />
+  </div>
+</form>
+<script src="{% static 'hemeroteca/form.js' %} async></script>
+{% endblock %}

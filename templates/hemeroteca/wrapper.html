@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ca">
+  <head>
+    {% block title %}
+    <title>La Vall de Vidre | Arxiu</title>
+    {% endblock %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% block head %}{% endblock %}
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="{% static 'hemeroteca/css/style.css' %}" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div>
+      <span class="site-title">L'Hemeroteca de la Vall de Vidre</span>
+      <nav class="site-navigation">
+        <ul>
+          <li><a href="{% url 'hemeroteca:publications' %}">Publicacions</a></li>
+          <li><a href="{% url 'hemeroteca:sections' %}">Seccions</a></li>
+          <li><a href="{% url 'hemeroteca:signatures' %}">Firmes</a></li>
+          <li><a href="{% url 'hemeroteca:articles' %}">Articles</a></li>
+          <li><a href="{% url 'hemeroteca:search' %}">Cerca</a></li>
+        </ul>
+      </nav>
+      </div>
+    </header>
+    <main class="site-content">
+      {% block content %}<!-- default content text (typically empty) -->{% endblock %}
+    </main>
+  </body>
+  {% block footer %}{% endblock %}
+</html>
