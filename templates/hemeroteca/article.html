@@ -19,7 +19,7 @@
     Sense secció
     {% endif %}
   </li>
-  <li><strong>Data: </strong><a href="{% url 'hemeroteca:publication' article.publication.pk %}">{{ article.date | date:'d-m-Y' }}</a></li>
+  <li><strong>Data: </strong><a href="{% url 'hemeroteca:publication' article.publication.pk %}">{{ article.publication.date | date:'d-m-Y' }}</a></li>
   <li><strong>Número: </strong><a href="{% url 'hemeroteca:publication' article.publication.pk %}">{{ article.publication.number }}</a></li>
 </ul>
 
