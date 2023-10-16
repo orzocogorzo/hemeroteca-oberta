@@ -1,0 +1,17 @@
+.signature-portrait {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+}
+
+@media (max-width: 920px) {
+  .signature-portrait {
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+#articles thead th:nth-child(2),
+#articles tbody td:nth-child(2) {
+  display: none;
+}

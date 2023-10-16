@@ -1,0 +1,29 @@
+#pdfReader {
+  height: 90vh;
+  width: calc(100vw - var(--oh-main--padding) * 2);
+  margin: 0
+    min(
+      var(--oh-main--padding),
+      calc((100vw - var(--oh-main--width)) / -2 + var(--oh-main--padding))
+    );
+  position: relative;
+  padding: 1em 0px;
+  border-top: 1px solid #ededed;
+  border-bottom: 1px solid #ededed;
+}
+
+@media (max-width: 920px) {
+  #pdfReader {
+    width: 100%;
+    margin: 0px;
+  }
+}
+
+#pdfReader .app {
+  overflow: hidden;
+}
+
+#pdfReader .app .reader-sidebar {
+  z-index: 10;
+  box-shadow: 3px 0px 5px -5px #0005;
+}

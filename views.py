@@ -57,11 +57,24 @@ class API:
 
         # start = per_page * page
         # end = start + per_page
+        limit = request.GET.get("limit")
+        if limit is not None:
+            try:
+                limit = int(limit)
+            except ValueError:
+                limit = None
 
-        articles = Article.objects.all()  # [start:end]
+        articles = Article.objects.all().order_by("title")
+        if limit:
+            articles = articles[:limit]
         return JsonResponse(
             [Serializer.article(article) for article in articles],
             safe=False,
+            json_dumps_params={
+                "indent": 0,
+                "sort_keys": False,
+                "separators": (",", ":"),
+            },
         )
 
     @staticmethod

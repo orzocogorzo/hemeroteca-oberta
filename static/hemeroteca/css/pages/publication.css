@@ -1,0 +1,4 @@
+#articles thead th:nth-child(4),
+#articles tbody td:nth-child(4) {
+  display: none;
+}

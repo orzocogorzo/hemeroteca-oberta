@@ -7,23 +7,37 @@
     {% endblock %}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     {% block head %}{% endblock %}
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
     <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
     <link rel="stylesheet" href="{% static 'hemeroteca/css/style.css' %}" />
+    <script src="/static/hemeroteca/js/navigation.js"></script>
   </head>
   <body>
+    <div class="site-wrapper">
     <header class="site-header">
-      <div>
-      <span class="site-title">L'Hemeroteca de la Vall de Vidre</span>
+      <div class="site-header-inner">
+        <div class="site-title">
+          <p>Hemeroteca digital</p>
+          <h1><a href="/">La Vall de Vidre</a></h1>
+        </div>
       <nav class="site-navigation">
+        <div class="burger">
+          <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M5 5v1.5h14V5H5zm0 7.8h14v-1.5H5v1.5zM5 19h14v-1.5H5V19z"></path>
+          </svg>
+        </div>
         <ul>
-          <li><a href="{% url 'hemeroteca:publications' %}">Publicacions</a></li>
-          <li><a href="{% url 'hemeroteca:sections' %}">Seccions</a></li>
-          <li><a href="{% url 'hemeroteca:signatures' %}">Firmes</a></li>
-          <li><a href="{% url 'hemeroteca:articles' %}">Articles</a></li>
-          <li><a href="{% url 'hemeroteca:search' %}">Cerca</a></li>
+          {% with url_name=request.resolver_match.url_name %}
+          <li class="{% if url_name == 'search' %}active{% endif %}"><a href="{% url 'hemeroteca:search' %}">Cerca</a></li>
+          <li class="{% if url_name == 'publications' %}active{% endif %}"><a href="{% url 'hemeroteca:publications' %}">Publicacions</a></li>
+          <li class="{% if url_name == 'sections' %}active{% endif %}"><a href="{% url 'hemeroteca:sections' %}">Seccions</a></li>
+          <li class="{% if url_name == 'signatures' %}active{% endif %}"><a href="{% url 'hemeroteca:signatures' %}">Firmes</a></li>
+          <li class="{% if url_name == 'articles' %}active{% endif %}"><a href="{% url 'hemeroteca:articles' %}">Articles</a></li>
+          {% endwith %}
         </ul>
       </nav>
       </div>
@@ -31,6 +45,7 @@
     <main class="site-content">
       {% block content %}<!-- default content text (typically empty) -->{% endblock %}
     </main>
+    </div>
   </body>
   {% block footer %}{% endblock %}
 </html>

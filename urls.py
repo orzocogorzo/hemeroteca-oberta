@@ -5,7 +5,7 @@ from .views import API, Views
 
 app_name = "hemeroteca"
 urlpatterns = [
-    path("", RedirectView.as_view(url="publications/", permanent=True), name="index"),
+    path("", RedirectView.as_view(url="search/", permanent=True), name="index"),
     path("publications/", Views.publications, name="publications"),
     path(
         "publications/<int:pk>/",

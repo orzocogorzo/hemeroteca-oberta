@@ -2,10 +2,11 @@
 {% load static %} 
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'hemeroteca/css/signature.css' %}" />
+<link rel="stylesheet" href="{% static 'hemeroteca/css/pages/signature.css' %}" />
 {% endblock %}
 
 {% block content %}
+<h3>Firma</h3>
 <h1>{{ signature.name }}</h1>
 <img class="signature-portrait" src="{% static signature.portrait %}" />
 <h2>Articles</h2>

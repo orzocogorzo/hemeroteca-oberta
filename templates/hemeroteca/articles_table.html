@@ -4,9 +4,8 @@
     <tr>
       <th>Títol</th>
       <th>Firma</th>
-      <th>Número</th>
-      <th>Data</th>
       <th>Secció</th>
+      <th>Núm.</th>
     </tr>
   </thead>
   <tbody>
@@ -18,13 +17,12 @@
       {% else %}
         <td></td>
       {% endif %}
-      <td><a href="{% url 'hemeroteca:publication' article.publication.pk %}">{{ article.publication.pk }}</a></td>
-      <td><a href="{% url 'hemeroteca:publication' article.publication.pk %}">{{ article.publication.date | date:'d-m-Y' }}</a></td>
       {% if article.section %}
         <td><a href="{% url 'hemeroteca:section' article.section.pk %}">{{ article.section.name }}</a></td>
       {% else %}
         <td></td>
       {% endif %}
+      <td><a href="{% url 'hemeroteca:publication' article.publication.pk %}">{{ article.publication.pk }}</a></td>
     </tr>
     {% endfor %}
   </tbody>
@@ -32,4 +30,5 @@
 
 {% block footer %}
 <script src="{% static 'hemeroteca/js/articles.table.js' %}" async></script>
+<link rel="stylesheet" href="/static/hemeroteca/css/components/articles-table.css" />
 {% endblock %}

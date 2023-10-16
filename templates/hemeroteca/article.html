@@ -1,6 +1,15 @@
-{% extends 'hemeroteca/wrapper.html' %} {% load static %} {% block head %}
+{% extends 'hemeroteca/wrapper.html' %}
+{% load static %}
+
+{% block head %}
+<script src="/static/hemeroteca/js/pdf-reader/build/static/js/main.js"></script>
+<link rel="stylesheet" href="/static/hemeroteca/js/pdf-reader/build/static/css/main.css" />
 <link rel="stylesheet" href="{% static 'hemeroteca/css/style.css' %}" />
-{% endblock %} {% block content %}
+<link rel="stylesheet" href="{% static 'hemeroteca/css/components/reader.css' %}" />
+{% endblock %}
+
+{% block content %}
+<h3>Artícle</h3>
 <h1>{{ article.title }}</h1>
 <ul>
   <li>
@@ -23,16 +32,12 @@
   <li><strong>Número: </strong><a href="{% url 'hemeroteca:publication' article.publication.pk %}">{{ article.publication.number }}</a></li>
 </ul>
 
-<object
-  id="document"
-  data="{% static article.publication.file %}#page={{ article.page }}"
-  type="application/pdf"
-  width="100%"
->
-  <p>
-    No podem mostrar-te el contingut del document des d'aquí. Descarrega't l'arxiu
-    <a href="{% static publication.file %}">amb aquest enllaç</a>
-  </p>
-</object>
-
+<div id="pdfReader" class="pdf-document"></div>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => renderPdf({
+      rootEl: document.getElementById("pdfReader"),
+      source: "{% static article.publication.file %}",
+      page: "{{ article.page }}",
+    }));
+  </script>
 {% endblock %}

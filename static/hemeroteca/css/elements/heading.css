@@ -1,0 +1,25 @@
+h1 {
+  font-size: var(--oh-font-size--xl);
+  line-height: var(--oh-line-height--xs);
+  font-weight: bold;
+}
+
+h2 {
+  font-size: var(--oh-font-size--xl);
+  line-height: var(--oh-line-height--xs);
+  font-weight: normal;
+}
+
+h3 {
+  font-size: var(--oh-font-size--l);
+  line-height: var(--oh-line-height--s);
+  font-weight: normal;
+}
+
+h4,
+h5,
+h6 {
+  font-size: var(--oh-font-size--small);
+  line-height: var(--oh-line-height);
+  font-weight: bold;
+}

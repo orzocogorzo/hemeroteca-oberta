@@ -5,7 +5,7 @@ const articlesTable = new DataTable("#articles", {
     info: "Pàgina _PAGE_ de _PAGES_",
     infoEmpty: "No hi ha dades",
     infoFiltered: "(filtrades d'un total de _MAX_ files)",
-    search: "Cerca",
+    search: "Cerca: ",
     paginate: {
       first: "Primera",
       last: "Última",
@@ -14,7 +14,7 @@ const articlesTable = new DataTable("#articles", {
     },
   },
   ajax: {
-    url: "/hemeroteca/api/articles/",
+    url: "/hemeroteca/api/articles/?limit=50",
     dataSrc: "",
   },
   columns: [
@@ -33,25 +33,6 @@ const articlesTable = new DataTable("#articles", {
       },
     },
     {
-      data: "publication.number",
-      render: (data, _, row) => {
-        return `<a href="../publications/${row.publication.pk}/">${data}</a>`;
-      },
-    },
-    {
-      data: "publication.date",
-      render: (data, _, row) => {
-        const date = new Date(data);
-        let day = date.getDay().toString();
-        if (day.length === 1) day = "0" + day;
-        let month = (date.getMonth() + 1).toString();
-        if (month.length === 1) month = "0" + month;
-        const year = date.getFullYear();
-        const fmtDate = `${day}-${month}-${year}`;
-        return `<a href="../publications/${row.publication.pk}/">${fmtDate}</a>`;
-      },
-    },
-    {
       data: (row) => row.section?.name,
       render: (data, _, row) => {
         return data !== void 0
@@ -59,5 +40,22 @@ const articlesTable = new DataTable("#articles", {
           : "";
       },
     },
+    {
+      data: "publication.number",
+      render: (data, _, row) => {
+        return `<a href="../publications/${row.publication.pk}/">${data}</a>`;
+      },
+    },
   ],
 });
+
+fetch("/hemeroteca/api/articles/", {
+  headers: {
+    "Accept": "application/json",
+  },
+})
+  .then((res) => res.json())
+  .then((data) => {
+    articlesTable.clear();
+    articlesTable.rows.add(data).draw();
+  });

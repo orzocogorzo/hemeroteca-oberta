@@ -1,7 +1,12 @@
-{% extends 'hemeroteca/wrapper.html' %} {% load static %} {% block head %}
-<link rel="stylesheet" href="{% static 'hemeroteca/css/publications.css' %}" />
-{% endblock %} {% block content %}
-<h1>Cerca</h1>
+{% extends 'hemeroteca/wrapper.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'hemeroteca/css/pages/publications.css' %}" />
+{% endblock %}
+
+{% block content %}
+<h1>Cercador</h1>
 <form id="search">
   <div class="field">
     <input type="text" placeholder="Què estàs buscant?" />

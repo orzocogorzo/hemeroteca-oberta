@@ -1,8 +1,14 @@
 {% extends 'hemeroteca/wrapper.html' %}
 {% load static %}
 
+{% block head %}
+<link href="/static/hemeroteca/css/pages/section.css" rel="stylesheet" />
+{% endblock %}
+
 {% block content %}
+<h3>Secció</h3>
 <h1>{{ section.name }}</h1>
+<p>{{ section.description }}</p>
 <h2>Artícles</h2>
 {% include 'hemeroteca/articles_table.html' %}
 {% endblock %}

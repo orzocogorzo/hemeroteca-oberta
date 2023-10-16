@@ -1,0 +1,107 @@
+table.dataTable.hidden {
+  visibility: hidden;
+}
+
+.dataTables_wrapper .dataTables_length select {
+  border: none;
+  outline: none;
+  border-radius: 0px;
+  border-bottom: 1px solid;
+  color: var(--oh-color--link);
+}
+
+.dataTables_wrapper .dataTables_length select option {
+  color: var(--oh-color--text);
+}
+
+.dataTables_wrapper .dataTables_length select:focus-within:active {
+  border-bottom: none;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  border: none;
+  outline: none;
+  border-radius: 0px;
+  border-bottom: 1px solid #0003;
+  width: 300px;
+  color: var(--oh-color--link);
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+  border-bottom-color: var(--oh-color--link);
+}
+
+@media (max-width: 920px) {
+  .dataTables_wrapper .dataTables_filter {
+    margin-top: 1rem;
+  }
+
+  .dataTables_wrapper .dataTables_filter input {
+    display: block;
+    margin: auto;
+    padding-top: 0px;
+    margin-top: -2px;
+  }
+}
+
+table.dataTable {
+  padding-top: 2rem;
+}
+
+table.dataTable.compact th,
+table.dataTable.compact td {
+  line-height: 1.2;
+}
+
+@media (max-width: 920px) {
+  table.dataTable.compact tbody td {
+    padding: 0.6em;
+  }
+}
+
+table.dataTable.compact tbody td:first-child {
+  padding-left: 1rem;
+}
+
+table.dataTable.compact tbody td:last-child {
+  padding-right: 1rem;
+}
+
+table.dataTable thead > tr > th:before,
+table.dataTable thead > tr > th:after {
+  color: var(--oh-color--link);
+}
+
+.dataTables_wrapper .dataTables_info {
+  display: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: 0.15rem 0.5rem;
+  border-radius: 0px;
+  border: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  background: unset;
+  color: var(--oh-color--link) !important;
+  outline: none;
+  border: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:active {
+  box-shadow: unset;
+  border-bottom: 1px solid;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background: unset;
+  border: none;
+  color: var(--oh-color--link) !important;
+  border-bottom: 1px solid;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  border-bottom: 1px solid;
+}

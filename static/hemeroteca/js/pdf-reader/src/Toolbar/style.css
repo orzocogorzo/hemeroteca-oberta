@@ -1,0 +1,9 @@
+@media (max-width: 920px) {
+  .rpv-toolbar .rpv-toolbar__left {
+    display: none;
+  }
+
+  .rpv-toolbar .rpv-toolbar__center {
+    justify-content: start;
+  }
+}

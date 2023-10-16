@@ -1,0 +1,6 @@
+@media (max-width: 920px) {
+  #articles thead th:nth-child(3),
+  #articles tbody td:nth-child(3) {
+    display: none;
+  }
+}

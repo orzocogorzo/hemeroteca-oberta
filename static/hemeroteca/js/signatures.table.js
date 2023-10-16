@@ -5,7 +5,7 @@ const signaturesTable = new DataTable("#signatures", {
     info: "Pàgina _PAGE_ de _PAGES_",
     infoEmpty: "No hi ha dades",
     infoFiltered: "(filtrades d'un total de _MAX_ files)",
-    search: "Cerca",
+    search: "Cerca: ",
     paginate: {
       first: "Primera",
       last: "Última",

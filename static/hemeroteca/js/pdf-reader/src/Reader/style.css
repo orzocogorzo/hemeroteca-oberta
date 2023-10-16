@@ -1,0 +1,38 @@
+.reader {
+  display: flex;
+  height: 100%;
+}
+
+@media (max-width: 920px) {
+  .reader {
+    display: block;
+  }
+}
+
+.reader-sidebar {
+  width: 260px;
+  height: 100%;
+  padding: 0.6em 1.2em;
+  box-shadow: 3px 0px 5px -5px #0003;
+  z-index: 10;
+}
+
+@media (max-width: 920px) {
+  .reader-sidebar {
+    width: 100%;
+    padding: 0;
+    height: auto;
+    box-shadow: none;
+  }
+}
+
+.reader-content {
+  flex: 1;
+  display: block;
+}
+
+@media (max-width: 920px) {
+  .reader-content {
+    height: calc(100% - 91px);
+  }
+}

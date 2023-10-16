@@ -1,0 +1,44 @@
+form {
+  display: block;
+}
+
+form .field {
+  display: block;
+  margin: 1rem 0;
+}
+
+form .field label,
+form .field select,
+form .field input {
+  display: block;
+  width: 100%;
+}
+
+form .field select,
+form .field input {
+  font-size: var(--oh-font-size);
+  padding: 0.4em 1em;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid;
+  outline: none;
+}
+
+form .field input:focus {
+  color: var(--oh-color--link);
+}
+
+form .field input {
+  width: calc(100% - 2rem);
+}
+
+form .field input[type="submit"] {
+  cursor: pointer;
+  width: 100%;
+  border-bottom: none;
+}
+
+form .field input[type="submit"]:hover {
+  background-color: var(--oh-color--link);
+  color: var(--oh-color--secondary);
+}

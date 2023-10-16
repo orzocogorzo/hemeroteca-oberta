@@ -1,20 +1,27 @@
 {% extends 'hemeroteca/wrapper.html' %}
 {% load static %} 
 
-{% block content %}
-<h1>Número {{ publication.number }}</h1>
-<object
-    id="document"
-    data="{% static publication.file %}"
-    type="application/pdf"
-    width="100%"
->
-    <p>
-        No podem mostrar-te el contingut des d'aquí. Descarrega't l'arxiu
-        <a href="{% static publication.file %}">amb aquest enllaç.</a>
-    </p>
-</object>
+{% block head %}
+<script src="/static/hemeroteca/js/pdf-reader/build/static/js/main.js"></script>
+<link rel="stylesheet" href="/static/hemeroteca/js/pdf-reader/build/static/css/main.css" />
+<link rel="stylesheet" href="{% static 'hemeroteca/css/components/reader.css' %}" />
+<link rel="stylesheet" href="{% static 'hemeroteca/css/pages/publication.css' %}" />
+{% endblock %}
 
-<h2>Artícles</h2>
+{% block content %}
+<h3>Publicació</h3>
+<h1>Número {{ publication.number }}</h1>
+<div id="pdfReader" class="document"></div>
+
+<script>
+    window.addEventListener("DOMContentLoaded", () => renderPdf({
+        rootEl: document.getElementById("pdfReader"),
+        source: "{% static publication.file %}",
+        search: "{{ request.GET.search }}",
+    }));
+</script>
+
+<br>
+<h2>Articles</h2>
 {% include 'hemeroteca/articles_table.html' %}
 {% endblock %}
