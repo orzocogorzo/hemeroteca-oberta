@@ -17,12 +17,11 @@ Primer necessitaràs un projecte de django instal·lat. Per crear-lo, podeu se
 
 La configuració es definirà a l'arxiu `settings.py` de la vostre projecte.
 
-1. HEMEROTECA_SEARCH_CONTENT: Variable lògica que indica si l'hemeroteca ha
+1. HEMEROTECA_TITLE: Títol de la vostra publicació
+2. HEMEROTECA_SEARCH_CONTENT: Variable lògica que indica si l'hemeroteca ha
    de suportar la funcionalitat de cerca dins el contingut. En cas que així
    sigui, el programari tesseract serà imprescindible per poder fer la ingesta
    de dades
-
-2.
 
 ## Ingesta
 

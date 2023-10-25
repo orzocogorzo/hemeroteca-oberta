@@ -3,6 +3,7 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.shortcuts import render
 from django.urls import reverse
+from django.db.models import Q
 
 from .models import Publication, Section, Signature, Article, Content
 from .serializer import Serializer
@@ -47,34 +48,31 @@ class API:
         if request.method != "GET":
             raise BadRequest
 
-        # page = str(request.GET.get("page", "1"))
-        # per_page = str(request.GET.get("per_page", "10"))
-        # try:
-        #     page = max(0, int(page) - 1)
-        #     per_page = int(per_page)
-        # except ValueError:
-        #     raise BadRequest
+        start = int(request.GET.get("start"))
+        length = int(request.GET.get("length"))
+        end = start + length
+        search = request.GET.get("search[value]")
 
-        # start = per_page * page
-        # end = start + per_page
-        limit = request.GET.get("limit")
-        if limit is not None:
-            try:
-                limit = int(limit)
-            except ValueError:
-                limit = None
+        if search:
+            articles = Article.objects.filter(
+                Q(title__icontains=search)
+                | Q(publication__number__icontains=search)
+                | Q(signature__name__icontains=search)
+                | Q(section__name__icontains=search)
+            )
+        else:
+            articles = Article.objects.all()
 
-        articles = Article.objects.all().order_by("title")
-        if limit:
-            articles = articles[:limit]
         return JsonResponse(
-            [Serializer.article(article) for article in articles],
-            safe=False,
-            json_dumps_params={
-                "indent": 0,
-                "sort_keys": False,
-                "separators": (",", ":"),
+            {
+                "recordsTotal": Article.objects.count(),
+                "recordsFiltered": articles.count(),
+                "data": [
+                    Serializer.article(article)
+                    for article in articles.order_by("title")[start:end]
+                ],
             },
+            safe=False,
         )
 
     @staticmethod

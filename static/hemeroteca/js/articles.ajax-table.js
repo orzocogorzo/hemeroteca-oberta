@@ -15,7 +15,6 @@ const articlesTable = new DataTable("#articles", {
   },
   ajax: {
     url: "/hemeroteca/api/articles/?limit=50",
-    dataSrc: "",
   },
   columns: [
     {
@@ -47,15 +46,6 @@ const articlesTable = new DataTable("#articles", {
       },
     },
   ],
+  serverSide: true,
+  processing: true,
 });
-
-fetch("/hemeroteca/api/articles/", {
-  headers: {
-    "Accept": "application/json",
-  },
-})
-  .then((res) => res.json())
-  .then((data) => {
-    articlesTable.clear();
-    articlesTable.rows.add(data).draw();
-  });
