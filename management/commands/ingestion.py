@@ -228,7 +228,7 @@ class Command(BaseCommand):
 
             publication = Publication(
                 cover=re.sub(r"^hemeroteca\/static\/", "", datum["cover"]),
-                file=re.sub(r"^hemeroteca\/static\/", "", os.path.join(file_path)),
+                file=re.sub(r"^hemeroteca\/static\/", "", os.path.join(store_path)),
                 number=int(datum["number"]),
                 date=datum["date"],
             )

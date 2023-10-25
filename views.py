@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.exceptions import BadRequest
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -7,6 +8,14 @@ from django.db.models import Q
 
 from .models import Publication, Section, Signature, Article, Content
 from .serializer import Serializer
+
+
+def fill_context(context: dict) -> dict:
+    return {
+        "site_title": settings.HEMEROTECA_TITLE,
+        "site_description": settings.HEMEROTECA_DESCRIPTION,
+        **context,
+    }
 
 
 class API:
@@ -113,7 +122,7 @@ class Views:
                 return render(
                     request,
                     "hemeroteca/publications.html",
-                    {"publications": publications},
+                    fill_context({"publications": publications}),
                 )
 
         elif request.method == "POST":
@@ -135,14 +144,14 @@ class Views:
                 return render(
                     request,
                     "hemeroteca/section.html",
-                    {"section": section, "articles": articles},
+                    fill_context({"section": section, "articles": articles}),
                 )
             else:
                 sections = Section.objects.all()
                 return render(
                     request,
                     "hemeroteca/sections.html",
-                    {"sections": sections},
+                    fill_context({"sections": sections}),
                 )
 
         elif request.method == "POST":
@@ -164,14 +173,14 @@ class Views:
                 return render(
                     request,
                     "hemeroteca/signature.html",
-                    {"signature": signature, "articles": articles},
+                    fill_context({"signature": signature, "articles": articles}),
                 )
             else:
                 signatures = Signature.objects.all()
                 return render(
                     request,
                     "hemeroteca/signatures.html",
-                    {"signatures": signatures},
+                    fill_context({"signatures": signatures}),
                 )
 
         elif request.method == "POST":
@@ -190,18 +199,14 @@ class Views:
                 return render(
                     request,
                     "hemeroteca/article.html",
-                    {"article": datum},
+                    fill_context({"article": datum}),
                 )
             else:
-                # articles = []
-                # for article in Article.objects.all():
-                #     datum = Serializer.article(article)
-                #     articles.append(datum)
-
+                articles = Article.objects.all()
                 return render(
                     request,
                     "hemeroteca/articles.html",
-                    # {"articles": articles},
+                    fill_context({"articles": articles}),
                 )
 
         elif request.method == "POST":
@@ -214,4 +219,4 @@ class Views:
 
     @staticmethod
     def search(request: HttpRequest) -> HttpResponse:
-        return render(request, "hemeroteca/search.html")
+        return render(request, "hemeroteca/search.html", fill_context({}))
