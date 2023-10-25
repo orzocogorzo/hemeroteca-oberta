@@ -22,6 +22,8 @@ La configuració es definirà a l'arxiu `settings.py` de la vostre projecte.
    sigui, el programari tesseract serà imprescindible per poder fer la ingesta
    de dades
 
+2.
+
 ## Ingesta
 
 Per poder realitzar la ingesta haureu d'executar la comanda:
@@ -38,7 +40,8 @@ Els formats suportats per a aquest index són CSV i ODF. L'estructura d'aquest a
 haura de respectar el següent esquema:
 
 | Arxiu | Número | Data | Secció | Títol | Firma | Pàgina |
-+-------+--------+------+--------+-------+-------+--------+
+| ----- | ------ | ---- | ------ | ----- | ----- | ------ |
+| path  | int    | date | str    | str   | str   | int    |
 
 ### Camps de l'índex
 
