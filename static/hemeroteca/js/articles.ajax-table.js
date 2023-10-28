@@ -14,7 +14,7 @@ const articlesTable = new DataTable("#articles", {
     },
   },
   ajax: {
-    url: "/hemeroteca/api/articles/?limit=50",
+    url: "../api/articles/?limit=50",
   },
   columns: [
     {

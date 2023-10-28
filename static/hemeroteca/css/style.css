@@ -1,12 +1,12 @@
-@import url(/static/hemeroteca/css/elements/anchor.css);
-@import url(/static/hemeroteca/css/elements/heading.css);
+@import url(elements/anchor.css);
+@import url(elements/heading.css);
 
-@import url(/static/hemeroteca/css/parts/header.css);
+@import url(parts/header.css);
 
-@import url(/static/hemeroteca/css/components/navigation.css);
-@import url(/static/hemeroteca/css/components/form.css);
-@import url(/static/hemeroteca/css/components/data-table.css);
-@import url(/static/hemeroteca/css/components/page.css);
+@import url(components/navigation.css);
+@import url(components/form.css);
+@import url(components/data-table.css);
+@import url(components/page.css);
 
 :root {
   --oh-main--width: 920px;
