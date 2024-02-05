@@ -1,3 +1,8 @@
+# built-ins
+import os.path
+from functools import reduce
+
+# vendor
 from django.conf import settings
 from django.core.exceptions import BadRequest
 from django.http import HttpRequest, HttpResponse, JsonResponse
@@ -5,15 +10,45 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.shortcuts import render
 from django.urls import reverse
 from django.db.models import Q
+from unidecode import unidecode
 
+# source
 from .models import Publication, Section, Signature, Article, Content
 from .serializer import Serializer
 
 
+def get_react_statics() -> dict:
+    app_statics = os.path.join(
+        os.path.dirname(__file__), "static/hemeroteca/js/pdf-reader/build/static"
+    )
+    scripts = os.path.join(app_statics, "js")
+    styles = os.path.join(app_statics, "css")
+
+    script = [
+        os.path.join(scripts, file)
+        for file in os.listdir(scripts)
+        if file[-3:] == ".js"
+    ]
+    style = [
+        os.path.join(styles, file) for file in os.listdir(styles) if file[-4:] == ".css"
+    ]
+
+    if len(script) == 0 or len(style) == 0:
+        raise Exception("React scripts not found")
+
+    start_path = os.path.join(os.path.dirname(__file__), "static")
+    return {
+        "script": os.path.relpath(script[0], start_path),
+        "style": os.path.relpath(style[0], start_path),
+    }
+
+
 def fill_context(context: dict) -> dict:
+    statics = get_react_statics()
     return {
         "site_title": settings.HEMEROTECA_TITLE,
         "site_description": settings.HEMEROTECA_DESCRIPTION,
+        "statics": statics,
         **context,
     }
 
@@ -89,13 +124,54 @@ class API:
         if request.method != "GET":
             raise BadRequest
 
-        search_text = request.GET.get("text")
-        if not search_text:
+        pattern = request.GET.get("pattern")
+        if not pattern:
             raise BadRequest
 
-        matches = Content.objects.filter(text__icontains=search_text)
-        publications = [Serializer.publication(match.publication) for match in matches]
+        pattern = unidecode(pattern.lower())
+        matches = Content.objects.filter(text__icontains=pattern)
+        publications = [
+            Serializer.publication(publication)
+            for publication in set([match.publication for match in matches])
+        ]
+
         return JsonResponse(publications, safe=False)
+
+    @staticmethod
+    def matches(request: HttpRequest, pk: int) -> HttpResponse:
+        if request.method != "GET":
+            raise BadRequest
+
+        pattern = request.GET.get("pattern")
+        if not pattern:
+            raise BadRequest
+
+        pattern = unidecode(pattern.lower())
+        matches = Content.objects.filter(publication=pk, text__icontains=pattern)
+        if len(matches) == 0:
+            return JsonResponse({"matches": []}, safe=False)
+
+        def reducer(handle, content):
+            handle[content.publication] = handle.get(content.publication, []) + [
+                content
+            ]
+            return handle
+
+        publication_found = reduce(reducer, matches, {})
+        publications = [
+            Serializer.publication_matches(publication, contents, pattern)
+            for publication, contents in publication_found.items()
+        ]
+
+        return JsonResponse(publications[0], safe=False)
+
+    @staticmethod
+    def content(request: HttpRequest, pk: int, page: int) -> HttpResponse:
+        if request.method != "GET":
+            raise BadRequest
+
+        content = get_object_or_404(Content, publication_id=pk, page=page)
+        return JsonResponse(Serializer.content(content), safe=False)
 
 
 class Views:
@@ -112,10 +188,17 @@ class Views:
                     Serializer.article(article, publication=publication)
                     for article in publication.article_set.all()
                 ]
+                statics = get_react_statics()
                 return render(
                     request,
                     "hemeroteca/publication.html",
-                    {"publication": publication, "articles": articles},
+                    fill_context(
+                        {
+                            "publication": publication,
+                            "articles": articles,
+                            "statics": statics,
+                        }
+                    ),
                 )
             else:
                 publications = Publication.objects.all()

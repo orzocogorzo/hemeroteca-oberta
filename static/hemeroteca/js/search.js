@@ -50,7 +50,7 @@
     ev.stopPropagation();
 
     const searchText = ev.target.querySelector('input[type="text"]').value;
-    const endpoint = "../api/search/?text=" + encodeURIComponent(searchText);
+    const endpoint = "../api/search/?pattern=" + encodeURIComponent(searchText);
     fetch(endpoint, {
       "Accept": "application/json",
     })

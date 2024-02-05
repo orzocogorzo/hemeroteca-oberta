@@ -2,8 +2,8 @@
 {% load static %} 
 
 {% block head %}
-<script src="{% static 'hemeroteca/js/pdf-reader/build/static/js/main.js' %}"></script>
-<link rel="stylesheet" href="{% static 'hemeroteca/js/pdf-reader/build/static/css/main.css' %}" />
+<script src="{% static statics.script %}"></script>
+<link rel="stylesheet" href="{% static statics.style %}" />
 <link rel="stylesheet" href="{% static 'hemeroteca/css/components/reader.css' %}" />
 <link rel="stylesheet" href="{% static 'hemeroteca/css/pages/publication.css' %}" />
 {% endblock %}
@@ -16,8 +16,10 @@
 <script>
     window.addEventListener("DOMContentLoaded", () => renderPdf({
         rootEl: document.getElementById("pdfReader"),
+        pk: {{ publication.pk }},
         source: "{% static publication.file %}",
         search: "{{ request.GET.search }}",
+        isVector: {% if publication.is_vector %}true{% else %}false{% endif %}
     }));
 </script>
 

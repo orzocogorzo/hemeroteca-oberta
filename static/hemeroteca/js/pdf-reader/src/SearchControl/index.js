@@ -5,11 +5,17 @@ import SearchMatches from "./SearchMatches";
 
 import "./style.css";
 
-function SearchControl({ ready, searcher, keyword }) {
-  const { Search, highlight } = searcher;
+function SearchControl({ pk, ready, plugin, keyword, isVector, jumpToPage }) {
+  const { Search, highlight } = plugin;
 
   const [matches, setMatches] = useState([]);
   const [currentMatch, setCurrentMatch] = useState(0);
+
+  useEffect(() => {
+    if (matches.length === 0) return;
+    setCurrentMatch(0);
+    jumpToPage(matches[0].pageIndex - 1);
+  }, [matches]);
 
   useEffect(() => {
     if (!(keyword && ready)) return;
@@ -23,16 +29,23 @@ function SearchControl({ ready, searcher, keyword }) {
     <div className="search-control">
       <Search>
         {(props) => {
-          const onSelectMatch = (match, index) => {
+          const jumpToMatch = (match, index) => {
             props.jumpToMatch(index + 1);
             setCurrentMatch(index);
+            if (!isVector) {
+              jumpToPage(match.pageIndex - 1);
+            }
+          };
+
+          const onSelectMatch = (match, index) => {
+            jumpToMatch(match, index);
           };
 
           const jumpToNearest = (dir) => {
-            const index = (currentMatch + dir) % props.numberOfMatches;
-            setCurrentMatch(index < 0 ? props.numberOfMatches + index : index);
-            if (dir > 0) props.jumpToNextMatch();
-            else props.jumpToPreviousMatch();
+            let index = (currentMatch + dir) % matches.length;
+            index = index < 0 ? matches.length + index : index;
+            const match = matches[index];
+            jumpToMatch(match, index);
           };
 
           return (
@@ -42,6 +55,8 @@ function SearchControl({ ready, searcher, keyword }) {
                 setMatches={setMatches}
                 jumpPrevious={() => jumpToNearest(-1)}
                 jumpNext={() => jumpToNearest(1)}
+                isVector={isVector}
+                pk={pk}
               />
               <SearchMatches
                 currentIndex={currentMatch}

@@ -153,6 +153,9 @@ class Command(BaseCommand):
 
         count = 0
         for row in data:
+            if not row[0]:
+                continue
+
             publication = self.post_publication(row)
             section = self.post_section(row)
             signature = self.post_signature(row)
@@ -213,9 +216,9 @@ class Command(BaseCommand):
                 os.path.basename(file_path),
             )
 
-            with open(file_path, "rb") as rsock:
-                with open(store_path, "wb") as wsock:
-                    wsock.write(rsock.read())
+            with open(file_path, "rb") as rfp:
+                with open(store_path, "wb") as wfp:
+                    wfp.write(rfp.read())
 
             cover_img = get_cover(file_path)
             cover_path = os.path.join(
@@ -234,11 +237,15 @@ class Command(BaseCommand):
             )
             publication.save()
 
+            fmt_handle = {"is_vector": True}
             if (
                 hasattr(settings, "HEMEROTECA_SEARCH_CONTENT")
                 and settings.HEMEROTECA_SEARCH_CONTENT is True
             ):
-                self.post_content(row, publication)
+                self.post_content(row, publication, fmt_handle)
+
+            publication.is_vector = fmt_handle["is_vector"]
+            publication.save()
 
         return publication
 
@@ -305,13 +312,20 @@ class Command(BaseCommand):
         article.save()
         return article
 
-    def post_content(self, row: list, publication: Publication) -> Content:
+    def post_content(
+        self, row: list, publication: Publication, fmt_handle: dict
+    ) -> list[Content]:
         datum = self.fields.datum("content", row)
         file_path = os.path.abspath(
             os.path.join(os.path.dirname(self.catalog), datum["file"])
         )
         parser = PdfParser(file_path)
+        fmt_handle["is_vector"] = parser.format == "str"
 
-        content = Content(text=parser.text, publication=publication)
-        content.save()
-        return content
+        pages = []
+        for page, text in parser.paged_text:
+            content = Content(text=text.lower(), page=page, publication=publication)
+            content.save()
+            pages.append(content)
+
+        return pages

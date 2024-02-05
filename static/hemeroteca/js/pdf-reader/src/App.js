@@ -1,15 +1,15 @@
-import { Worker } from "@react-pdf-viewer/core";
+import * as core from "@react-pdf-viewer/core";
 
 import Reader from "./Reader";
 
 import "./App.css";
 
-function App({ source, search, page }) {
+function App(props) {
   return (
     <div className="pdf-reader">
-      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-        <Reader source={source} search={search} page={page} />
-      </Worker>
+      <core.Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+        <Reader {...props} />
+      </core.Worker>
     </div>
   );
 }

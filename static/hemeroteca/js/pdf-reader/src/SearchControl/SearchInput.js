@@ -1,5 +1,41 @@
 import { useEffect, useState } from "react";
 
+function storeSearch(keyword) {
+  const query = new URLSearchParams(window.location.search);
+  query.set("search", keyword);
+  const location = window.location.pathname + "?" + query.toString();
+  window.history.pushState({ from: window.location.search }, null, location);
+}
+
+function ajaxSearch({ pk, keyword }) {
+  return fetch(`/hemeroteca/api/matches/${pk}?pattern=${keyword}`, {
+    method: "GET",
+    headers: {
+      "Accept": "application/json; charset=utf-8",
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      let lastPage,
+        matchIndex = 0;
+      return data.matches.map((match, i) => {
+        if (lastPage === match.pageIndex) {
+          matchIndex += 1;
+        } else {
+          matchIndex = 0;
+        }
+        return {
+          "keyword": new RegExp(keyword, "gi"),
+          "matchIndex": matchIndex,
+          "pageIndex": match.pageIndex,
+          "pageText": match.pageText,
+          "startIndex": match.startIndex,
+          "endIndex": match.endIndex,
+        };
+      });
+    });
+}
+
 function SearchInput({
   keyword,
   setKeyword,
@@ -9,6 +45,8 @@ function SearchInput({
   setMatches,
   numberOfMatches,
   currentMatch,
+  isVector,
+  pk,
 }) {
   const [value, setValue] = useState(keyword ? keyword : "");
 
@@ -24,7 +62,17 @@ function SearchInput({
   };
 
   useEffect(() => {
-    if (keyword) search().then((matches) => setMatches(matches));
+    if (!keyword) return;
+    if (isVector) {
+      search(keyword).then((matches) => {
+        setMatches(matches);
+      });
+    } else {
+      ajaxSearch({ pk, keyword }).then((matches) => {
+        setMatches(matches);
+      });
+    }
+    storeSearch(keyword);
   }, [keyword]);
 
   return (

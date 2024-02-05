@@ -3,6 +3,7 @@ import os
 
 # VENDOR
 from PyPDF2 import PdfReader
+from unidecode import unidecode
 
 # SOURCE
 from hemeroteca.parsers.image import ImageParser
@@ -39,6 +40,17 @@ class PdfParser(object):
             return text
         else:
             return ImageParser(self.file_path).text
+
+    @property
+    def paged_text(self):
+        if self.format == "str":
+            pages = []
+            for i, page in enumerate(self.pages):
+                pages.append((i + 1, unidecode(page.extract_text())))
+
+            return pages
+        else:
+            return ImageParser(self.file_path).paged_text
 
     def __str__(self):
         return self.text

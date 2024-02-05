@@ -1,10 +1,17 @@
+# built-ins
+import re
+
+# source
+from hemeroteca.models import Article, Content, Publication, Section, Signature
+
+
 class Serializer:
     @staticmethod
     def article(
-        article,
-        publication=None,
-        signature=None,
-        section=None,
+        article: Article,
+        publication: Publication | None = None,
+        signature: Signature | None = None,
+        section: Section | None = None,
     ) -> dict:
         if publication is None:
             publication = article.publication
@@ -25,7 +32,7 @@ class Serializer:
         }
 
     @staticmethod
-    def publication(publication) -> dict | None:
+    def publication(publication: Publication) -> dict | None:
         if publication is None:
             return publication
 
@@ -35,17 +42,50 @@ class Serializer:
             "file": str(publication.file),
             "number": publication.number,
             "date": publication.date,
+            "is_vector": publication.is_vector,
         }
 
     @staticmethod
-    def section(section) -> dict | None:
+    def publication_matches(
+        publication: Publication, contents: list[Content], pattern: str
+    ) -> dict | None:
+        publication = Serializer.publication(publication)
+        if publication is None:
+            return Publication
+
+        publication["matches"] = []
+        for content in contents:
+            match = re.search(pattern, content.text)
+            if match is None:
+                continue
+
+            publication["matches"].append(
+                {
+                    "pageIndex": content.page,
+                    "pageText": content.text,
+                    "startIndex": match.start(),
+                    "endIndex": match.end(),
+                }
+            )
+
+        return publication
+
+    @staticmethod
+    def content(content: Content) -> dict | None:
+        if content is None:
+            return content
+
+        return {"text": content.text, "page": content.page}
+
+    @staticmethod
+    def section(section: Section) -> dict | None:
         if section is None:
             return section
 
         return {"pk": section.pk, "name": section.name}
 
     @staticmethod
-    def signature(signature) -> dict | None:
+    def signature(signature: Signature) -> dict | None:
         if signature is None:
             return signature
 

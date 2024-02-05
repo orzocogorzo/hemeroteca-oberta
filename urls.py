@@ -36,4 +36,6 @@ urlpatterns = [
     path("api/signatures/", API.signatures, name="rs_signatures"),
     path("api/articles/", API.articles, name="rs_articles"),
     path("api/search/", API.search, name="rs_search"),
+    path("api/matches/<int:pk>", API.matches, name="rs_matches"),
+    path("api/content/<int:pk>/<int:page>", API.content, name="rs_content"),
 ]

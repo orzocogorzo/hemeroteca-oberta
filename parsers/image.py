@@ -1,4 +1,5 @@
 # BUILT-INS
+import sys
 import os
 import re
 
@@ -8,19 +9,20 @@ import numpy as np
 import pytesseract
 import pdf2image
 from matplotlib import pyplot as plt
+from unidecode import unidecode
 
 
 def increase_contrast(img: np.ndarray) -> np.ndarray:
     lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
     l, a, b = cv2.split(lab)
-    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
     cl = clahe.apply(l)
     limg = cv2.merge((cl, a, b))
     return cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)
 
 
-# def get_grayscale(img: np.ndarray) -> np.ndarray:
-#     return cv2.cvtColor(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), cv2.COLOR_LAB2BGR)
+def get_grayscale(img: np.ndarray) -> np.ndarray:
+    return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 
 def binarize(img: np.ndarray) -> np.ndarray:
@@ -124,16 +126,27 @@ class ImageParser:
         text = ""
         for img in self.images:
             text += "\n" + re.sub(
-                r"(\n+|  +)", "  ", pytesseract.image_to_string(img, lang="spa")
+                r"(\n+|  +)", "  ", pytesseract.image_to_string(img, lang="cat")
             )
 
-        return text
+        return unidecode(text)
+
+    @property
+    def paged_text(self) -> list[str]:
+        pages = []
+        for i, img in enumerate(self.images):
+            text = "\n" + re.sub(
+                r"(\n+|  +)", "  ", pytesseract.image_to_string(img, lang="cat")
+            )
+            pages.append((i + 1, unidecode(text)))
+
+        return pages
 
     def preprocess(self) -> None:
         preprocessed = []
         for img in self.images:
-            img = increase_contrast(img)
-            # img = get_grayscale(img)
+            # img = increase_contrast(img)
+            img = get_grayscale(img)
             img = remove_noise(img)
             # img = thresholding(img)
             # img = binarize(img)
@@ -158,16 +171,11 @@ class ImageParser:
 
 
 if __name__ == "__main__":
-    file_path = os.path.normpath(
-        os.path.join(
-            os.path.abspath(os.path.dirname(__file__)),
-            "../data/pdfs/facsimil num. 0.pdf",
-        )
-    )
+    file_path = os.path.join(os.getcwd(), sys.argv[1])
 
     parser = ImageParser(file_path)
     print(parser.text)
     i = 1
-    out_path = os.path.join("../images")
+    out_path = os.path.join(__file__, "../images")
     for img in parser.images:
         cv2.imwrite(os.path.join(out_path, "test-%s.png" % i), img)

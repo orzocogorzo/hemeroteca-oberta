@@ -28,6 +28,12 @@ class Publication(models.Model):
         verbose_name="Document PDF",
         help_text="Arxiu PDF amb la publicació",
     )
+    is_vector = models.BooleanField(
+        default=True,
+        name="is_vector",
+        verbose_name="PDF vectorial",
+        help_text="L'arxiu font és un PDF de tipus vectorial",
+    )
 
     class Meta:
         verbose_name = "Publicació"
@@ -131,6 +137,12 @@ class Article(models.Model):
 class Content(models.Model):
     text = models.TextField()
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE)
+    page = models.IntegerField(
+        name="page",
+        verbose_name="Pàgina",
+        help_text="Pàgina on apareix l'article",
+        default=1,
+    )
 
     class Meta:
         verbose_name = "Contingut"
