@@ -1,15 +1,20 @@
+# built-ins
 import os.path
 import re
 import warnings
 import csv
 from datetime import date, datetime as dt
 from typing import Any
+import io
 
+# vendor
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 import pyexcel as pe
 import fitz
+from PIL import Image
 
+# source
 from hemeroteca.models import Publication, Section, Signature, Article, Content
 from hemeroteca.parsers.pdf import PdfParser
 
@@ -56,12 +61,17 @@ def parse_name(name: str) -> list[str]:
 
 
 def get_cover(file_path: str) -> fitz.Pixmap:
-    dpi = 300  # choose desired dpi here
+    dpi = 50  # choose desired dpi here
     zoom = dpi / 72  # zoom factor, standard: 72 dpi
     magnify = fitz.Matrix(zoom, zoom)  # magnifies in x, resp. y direction
     doc = fitz.open(file_path)  # open document
     page = list(doc.pages())[0]
-    return page.get_pixmap(matrix=magnify)  # render page to an image
+    pixmap = page.get_pixmap(matrix=magnify)  # render page to an image
+    image = Image.open(
+        io.BytesIO(pixmap.pil_tobytes(format="PNG", optimize=True, dpi=(dpi, dpi)))
+    )
+    image.resize((353, 500))
+    return image
 
 
 class CatalogFields:
