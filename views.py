@@ -1,5 +1,5 @@
 # built-ins
-import os.path
+import os
 from functools import reduce
 
 # vendor
@@ -46,6 +46,7 @@ def get_react_statics() -> dict:
 def fill_context(context: dict) -> dict:
     statics = get_react_statics()
     return {
+        "site_base_url": os.getenv("VDV_BASE_URL"),
         "site_title": settings.HEMEROTECA_TITLE,
         "site_description": settings.HEMEROTECA_DESCRIPTION,
         "statics": statics,

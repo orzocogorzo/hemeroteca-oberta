@@ -8,7 +8,11 @@ function storeSearch(keyword) {
 }
 
 function ajaxSearch({ pk, keyword }) {
-  return fetch(`/hemeroteca/api/matches/${pk}?pattern=${keyword}`, {
+  const endpoint =
+    process.env.REACT_APP_SITE_URL +
+    process.env.REACT_APP_API_URL +
+    `matches/${pk}?pattern=${encodeURIComponent(keyword)}`;
+  return fetch(endpoint, {
     method: "GET",
     headers: {
       "Accept": "application/json; charset=utf-8",
