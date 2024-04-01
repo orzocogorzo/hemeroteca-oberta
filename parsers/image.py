@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 import pytesseract
 import pdf2image
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 from unidecode import unidecode
 
 
