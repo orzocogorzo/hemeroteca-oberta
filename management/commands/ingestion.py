@@ -49,13 +49,13 @@ def parse_value(value: Any, field: str) -> Any:
         return re.sub(r" *\n *", ", ", value)
 
 
-def parse_name(name: str) -> list[str]:
+def parse_name(name: str | None) -> list[str]:
+    if name is None:
+        return [""]
+
     names = []
-    for n0 in name.strip().split("/"):
-        for n1 in re.split(r" i ", n0.strip(), 0, re.IGNORECASE):
-            for n2 in re.split(r" *, +", n1.strip()):
-                for n3 in n2.strip().split("\n"):
-                    names.append(n3)
+    for n in name.strip().split(";"):
+        names.append(n.strip())
 
     return [name for name in names if name]
 
@@ -168,14 +168,14 @@ class Command(BaseCommand):
 
             publication = self.post_publication(row)
             section = self.post_section(row)
-            signature = self.post_signature(row)
-            article = self.post_article(row)
+            signatures = self.post_signatures(row)
+            article = self.post_article(row, signatures)
 
             doc = {
                 "publication": publication.number,
                 "section": section.name if section else "",
                 "article": article.title,
-                "signature": signature.name if signature else "",
+                "signature": [signature.name for signature in signatures],
             }
 
             if options["verbosity"] > 0:
@@ -273,26 +273,25 @@ class Command(BaseCommand):
 
         return section
 
-    def post_signature(
-        self, row: list, name: str | None = None
-    ) -> Signature | list[Signature] | None:
+    def post_signatures(self, row: list, name: str | None = None) -> list[Signature]:
         if name is None:
             datum = self.fields.datum("signature", row)
-
-            if not datum["name"]:
-                return None
-
             name = datum["name"]
 
-        try:
-            signature = Signature.objects.get(name=name)
-        except Signature.DoesNotExist:
-            signature = Signature(name=name)
-            signature.save()
+        names = parse_name(name)
+        signatures = []
+        for name in names:
+            try:
+                signature = Signature.objects.get(name=name)
+            except Signature.DoesNotExist:
+                signature = Signature(name=name)
+                signature.save()
 
-        return signature
+            signatures.append(signature)
 
-    def post_article(self, row: list) -> Article:
+        return signatures
+
+    def post_article(self, row: list, signatures: list[Signature]) -> Article:
         datum = self.fields.datum("article", row)
 
         publication = Publication.objects.get(number=datum["number"])
@@ -315,11 +314,13 @@ class Command(BaseCommand):
             title=datum["title"],
             publication=publication,
             section=section,
-            signature=signature,
             page=datum["page"],
         )
 
         article.save()
+        for signature in signatures:
+            article.signatures.add(signature)
+
         return article
 
     def post_content(

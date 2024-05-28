@@ -10,14 +10,14 @@ class Serializer:
     def article(
         article: Article,
         publication: Publication | None = None,
-        signature: Signature | None = None,
+        signatures: list[Signature] = [],
         section: Section | None = None,
     ) -> dict:
         if publication is None:
             publication = article.publication
 
-        if signature is None:
-            signature = article.signature
+        if len(signatures) == 0:
+            signatures = [signature for signature in article.signatures.all()]
 
         if section is None:
             section = article.section
@@ -28,7 +28,7 @@ class Serializer:
             "page": article.page,
             "publication": Serializer.publication(publication),
             "section": Serializer.section(section),
-            "signature": Serializer.signature(signature),
+            "signatures": Serializer.signatures(signatures),
         }
 
     @staticmethod
@@ -85,12 +85,12 @@ class Serializer:
         return {"pk": section.pk, "name": section.name}
 
     @staticmethod
-    def signature(signature: Signature) -> dict | None:
-        if signature is None:
-            return signature
+    def signatures(signatures: list[Signature] = []) -> list[dict]:
+        if len(signatures) == 0:
+            return []
 
-        return {
+        return [{
             "pk": signature.pk,
             "name": signature.name,
             "portrait": str(signature.portrait),
-        }
+        } for signature in signatures]

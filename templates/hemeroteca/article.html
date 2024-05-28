@@ -14,10 +14,12 @@
 <ul>
   <li>
     <strong>Firma: </strong>
-    {% if article.signature %}
-    <a href="{% url 'hemeroteca:signature' article.signature.pk %}">{{ article.signature.name }}</a>
+    {% if article.signatures|length > 0 %}
+      {% for signature in article.signatures %}
+        <a href="{% url 'hemeroteca:signature' signature.pk %}">{{ signature.name }}</a>
+      {% endfor %}
     {% else %}
-    Sense firma
+      Sense firma
     {% endif %}
   </li>
   <li>

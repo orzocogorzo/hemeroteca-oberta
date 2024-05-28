@@ -251,7 +251,7 @@ class Views:
             if pk is not None:
                 signature = get_object_or_404(Signature, pk=pk)
                 articles = [
-                    Serializer.article(article, signature=signature)
+                    Serializer.article(article, signatures=[signature])
                     for article in signature.article_set.all()
                 ]
                 return render(

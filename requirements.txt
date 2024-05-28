@@ -2,6 +2,7 @@ opencv-python~=4.8.0.74
 pdf2image~=1.16.3
 Pillow~=10.0.0
 pyexcel~=0.7.0
+pyexcel-ods3~=0.6.1
 PyMuPDF~=1.22.5
 PyPDF2~=3.0.1
 pytesseract~=0.3.10

@@ -109,15 +109,13 @@ class Article(models.Model):
         blank=True,
         null=True,
     )
-    signature = models.ForeignKey(
+    signatures = models.ManyToManyField(
         Signature,
-        name="signature",
+        name="signatures",
         verbose_name="Firma",
         help_text="Firma de l'autoria de l'article. <strong>Opcional</strong>",
-        on_delete=models.CASCADE,
         default=None,
         blank=True,
-        null=True,
     )
     page = models.IntegerField(
         name="page",
