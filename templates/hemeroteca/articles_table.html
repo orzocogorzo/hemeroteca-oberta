@@ -12,11 +12,11 @@
     {% for article in articles %}
     <tr>
       <td><a href="{% url 'hemeroteca:article' article.pk %}">{{ article.title }}</a></td>
-      {% if article.signature %}
-        <td><a href="{% url 'hemeroteca:signature' article.signature.pk %}">{{ article.signature.name }}</a></td>
-      {% else %}
-        <td></td>
-      {% endif %}
+      <td>
+      {% for signature in article.signatures %}
+        <a href="{% url 'hemeroteca:signature' signature.pk %}">{{ signature.name }}</a>
+      {% endfor %}
+      </td>
       {% if article.section %}
         <td><a href="{% url 'hemeroteca:section' article.section.pk %}">{{ article.section.name }}</a></td>
       {% else %}
