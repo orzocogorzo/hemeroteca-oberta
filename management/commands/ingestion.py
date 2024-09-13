@@ -80,7 +80,7 @@ class CatalogFields:
     _date: int = 2
     _section: int = 3
     _title: int = 4
-    _signature: int = 5
+    _signatures: int = 5
     _page: int = 6
 
     @property
@@ -96,8 +96,8 @@ class CatalogFields:
         return {"name": self._section}
 
     @property
-    def signature(self):
-        return {"name": self._signature}
+    def signatures(self):
+        return {"name": self._signatures}
 
     @property
     def article(self):
@@ -169,13 +169,13 @@ class Command(BaseCommand):
             publication = self.post_publication(row)
             section = self.post_section(row)
             signatures = self.post_signatures(row)
-            article = self.post_article(row, signatures)
+            article = self.post_article(row)
 
             doc = {
                 "publication": publication.number,
                 "section": section.name if section else "",
                 "article": article.title,
-                "signature": [signature.name for signature in signatures],
+                "signatures": [signature.name for signature in signatures],
             }
 
             if options["verbosity"] > 0:
@@ -275,7 +275,7 @@ class Command(BaseCommand):
 
     def post_signatures(self, row: list, name: str | None = None) -> list[Signature]:
         if name is None:
-            datum = self.fields.datum("signature", row)
+            datum = self.fields.datum("signatures", row)
             name = datum["name"]
 
         names = parse_name(name)
@@ -291,7 +291,7 @@ class Command(BaseCommand):
 
         return signatures
 
-    def post_article(self, row: list, signatures: list[Signature]) -> Article:
+    def post_article(self, row: list) -> Article:
         datum = self.fields.datum("article", row)
 
         publication = Publication.objects.get(number=datum["number"])
@@ -301,14 +301,15 @@ class Command(BaseCommand):
         else:
             section = Section.objects.get(name=datum["section"])
 
-        if not datum["signature"]:
-            signature = None
-        else:
-            try:
-                signature = Signature.objects.get(name=datum["signature"])
-            except Signature.DoesNotExist as e:
-                print(e)
-                signature = None
+        signatures = []
+        if datum["signatures"]:
+            names = parse_name(datum["signatures"])
+            for name in names:
+                try:
+                    signature = Signature.objects.get(name=datum["signatures"])
+                    signatures.append(signature)
+                except Signature.DoesNotExist as e:
+                    print(e)
 
         article = Article(
             title=datum["title"],

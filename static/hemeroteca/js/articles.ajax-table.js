@@ -1,6 +1,6 @@
 const articlesTable = new DataTable("#articles", {
   language: {
-    lengthMenu: "Mosta _MENU_ files per pàgina",
+    lengthMenu: "Mostra _MENU_ files per pàgina",
     zeroRecords: "No s'han trobar resultats",
     info: "Pàgina _PAGE_ de _PAGES_",
     infoEmpty: "No hi ha dades",
@@ -24,11 +24,15 @@ const articlesTable = new DataTable("#articles", {
       },
     },
     {
-      data: (row) => row.signature?.name,
+      data: (row) => row.signatures || [],
       render: (data, _, row) => {
-        return data !== void 0
-          ? `<a href="../signatures/${row.signature.pk}/">${row.signature.name}</a>`
-          : "";
+        console.log({ data, _, row });
+        return data.reduce(
+          (html, signature) =>
+            html +
+            `<a href="../signatures/${signature.pk}/">${signature.name}</a>`,
+          "",
+        );
       },
     },
     {

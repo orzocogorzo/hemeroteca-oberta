@@ -102,7 +102,6 @@ class API:
             articles = Article.objects.filter(
                 Q(title__icontains=search)
                 | Q(publication__number__icontains=search)
-                | Q(signature__name__icontains=search)
                 | Q(section__name__icontains=search)
             )
         else:
@@ -251,7 +250,7 @@ class Views:
             if pk is not None:
                 signature = get_object_or_404(Signature, pk=pk)
                 articles = [
-                    Serializer.article(article, signatures=[signature])
+                    Serializer.article(article)  # , signatures=[signature])
                     for article in signature.article_set.all()
                 ]
                 return render(
