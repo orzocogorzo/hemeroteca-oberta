@@ -306,7 +306,7 @@ class Command(BaseCommand):
             names = parse_name(datum["signatures"])
             for name in names:
                 try:
-                    signature = Signature.objects.get(name=datum["signatures"])
+                    signature = Signature.objects.get(name=name)
                     signatures.append(signature)
                 except Signature.DoesNotExist as e:
                     print(e)
