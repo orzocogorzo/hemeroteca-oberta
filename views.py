@@ -101,6 +101,7 @@ class API:
         if search:
             articles = Article.objects.filter(
                 Q(title__icontains=search)
+                | Q(signatures__name__icontains=search)
                 | Q(publication__number__icontains=search)
                 | Q(section__name__icontains=search)
             )
