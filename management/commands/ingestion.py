@@ -105,7 +105,7 @@ class CatalogFields:
             "title": self._title,
             "publication": self._number,
             "section": self._section,
-            "signature": self._signature,
+            "signatures": self._signatures,
             "number": self._number,
             "page": self._page,
         }
